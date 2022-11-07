@@ -38,14 +38,16 @@ void main(void)
     inicio = insertarNodo(inicio,4, 1);
     inicio = borrarNodosVal(inicio, 3);
     inicio = borrarNodosVal(inicio, 4);
-
-    prueba = conversionLista(a, 3);
-    recorrerLista(prueba);
-    recorrerAlrevez(prueba);
+    recorrerLista(inicio);
     printf("\n");
-    
+    inicio = anadirMultiplesNodos(inicio, a, 2, 3);
+    recorrerLista(inicio);
+    printf("\n");
+    recorrerAlrevez(inicio);
+    printf("\n");
     recorrerLista(inicio);
     buscarElementos(inicio, 3);
+    printf("%d", longitudLista(inicio));
     inicio = eliminarLista(inicio);
 
 
@@ -129,12 +131,11 @@ int longitudLista(struct nodo *inicio)
 
     int cont = 1;
     struct nodo *elemento = inicio;
-
-    while (elemento != inicio->atras)
+    do 
     {
         elemento = elemento->siguiente;
         cont++;
-    }
+    } while (elemento != inicio);
     return cont;
 
 }
@@ -143,12 +144,11 @@ void recorrerLista(struct nodo *inicio)
 {
     struct nodo *elemento = inicio;
 
-    while (elemento != inicio->atras)
+    do 
     {
         printf("%i \t", elemento->val);
         elemento = elemento->siguiente;
-    }
-    printf("%i", elemento->val);
+    } while (elemento != inicio);
 
 }
 void recorrerAlrevez(struct nodo *inicio)
@@ -250,13 +250,47 @@ void buscarElementos(struct nodo *inicio, int val)
     }
 
 }
-/*
+
 struct nodo * anadirMultiplesNodos(struct nodo *inicio, int val[], int pos, int lon)
 {
+    //Definir Variables
     struct nodo *elemento = inicio;
-    if (listaVacia = 0;)
+    struct nodo *inicio_lista = conversionLista(val, lon);
+
+
+    //Caso si la posicion es mayor a la longitud
+    if (pos > longitudLista(inicio))
+        printf("Ingresa una posicion menor a la longitud de la lista");
+        return inicio;
+            printf("Hola");
+    //Caso si la lista esta vacía
+    if (listaVacia(inicio) == 0)
+        return inicio_lista;
+    
+    //Caso Base
+    for (int i = 0; i < lon; i++)
+    {
+
+        elemento = elemento->siguiente;
+    }
+    struct nodo *temporal;
+    
+    //Nodo de al final de la lista que apunte al elemento
+    inicio_lista->atras->siguiente = elemento;
+    //Nodo de atras de elemento que apunte 
+    elemento->atras->siguiente = inicio_lista;
+    //Se pone el temporal para intercambiar nodo de atras con lista Inicial
+    temporal = elemento->atras;
+    //Se iguala el nodo de elemento atras al inicio de la lista
+    elemento->atras = inicio_lista->atras;
+    //Se iguala el inicio de la lista con el elemnto de atras
+    inicio_lista->atras = temporal;
+    
+
+    return inicio;
 }
-*/
+
+
 struct nodo * conversionLista(int val[], int lon)
 {
     struct nodo *inicio = malloc(sizeof(struct nodo));  
