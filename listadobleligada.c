@@ -155,12 +155,11 @@ void recorrerAlrevez(struct nodo *inicio)
 {
     struct nodo *elemento = inicio->atras;
 
-    while (elemento != inicio)
+    do 
     {
         printf("%i \t", elemento->val);
         elemento = elemento->atras;
-    }
-    printf("%i", elemento->val);
+    }while (elemento != inicio->atras);
 
 }
 
@@ -168,11 +167,11 @@ struct nodo* eliminarLista(struct nodo *inicio)
 {
     struct nodo *elemento = inicio;
 
-    while(elemento != inicio->atras)
+    do
     {
         elemento = elemento->siguiente;
         free(elemento->atras);
-    }
+    } while (elemento != inicio);
     free(elemento);
     elemento = NULL;
     return elemento;
