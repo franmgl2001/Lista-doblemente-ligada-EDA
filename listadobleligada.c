@@ -26,11 +26,11 @@ struct nodo * anadirMultiplesNodos(struct nodo *inicio, int val[], int pos, int 
 void main(void)
 {
     struct nodo *inicio = NULL;
-    struct nodo *prueba;
+    struct nodo *prueba = NULL;
     int a[] = {1,2,3} ;
 
     inicio = insertarNodo(inicio, 2, 0);
-    inicio = insertarNodo(inicio, 1, 0);
+    inicio = insertarNodo(inicio, 1, 1);
     inicio = insertarNodo(inicio,3, 2);
     inicio = insertarNodo(inicio,4, 1);
     inicio = insertarNodo(inicio,3, 2);
@@ -45,6 +45,7 @@ void main(void)
     printf("\n");
     recorrerAlrevez(inicio);
     printf("\n");
+    inicio = anadirMultiplesNodos(inicio, a, 2, 3);
     recorrerLista(inicio);
     buscarElementos(inicio, 3);
     printf("%d", longitudLista(inicio));
@@ -78,12 +79,11 @@ struct nodo* insertarNodo(struct nodo *inicio, int num, int pos)
     {   
         inicio = malloc(sizeof(struct nodo));
         inicio->val = num;
-        inicio->siguiente = NULL;
-        inicio->atras = NULL;
+        inicio->siguiente = inicio;
+        inicio->atras = inicio;
         return inicio;
 
     }
-    //Cuando hay dos elementos y uno es null y el otro no
     struct nodo *elemento = inicio;
     for (int i = 0; i < pos; i++)
     {
@@ -305,7 +305,7 @@ struct nodo * conversionLista(int val[], int lon)
         struct nodo *nuevo = malloc(sizeof(struct nodo));
         elemento->siguiente = nuevo;
         nuevo->atras = elemento;
-        nuevo->siguiente = inicio->atras;
+        nuevo->siguiente = inicio;
         inicio->atras = nuevo;
         nuevo->val = val[i];
         elemento = nuevo;

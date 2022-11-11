@@ -15,7 +15,6 @@ struct nodo * enque(struct nodo *inicio, int val);
 struct nodo *encontrarNodo(struct nodo *inicio, int val);
 struct nodo *encontrarPos(struct nodo *inicio,int pos);
 struct nodo *eliminarCola(struct nodo *actual);
-//Todo:
 struct nodo * enqueMultiple(struct nodo *inicio, int tam, int val[]);
 
 
