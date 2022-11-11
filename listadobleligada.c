@@ -7,6 +7,7 @@ struct nodo{
     struct nodo *atras;
 };
 //Ya quedaron
+
 void inicializarLista(struct nodo *inicio);
 struct nodo* insertarNodo(struct nodo *inicio, int num, int pos);
 int longitudLista(struct nodo *inicio);
@@ -32,31 +33,19 @@ void main(void)
     int a[] = {1,2,3} ;
 
     inicio = insertarNodo(inicio, 2, 0);
-    inicio = insertarNodo(inicio, 1, 1);
-    inicio = insertarNodo(inicio,3, 2);
-    inicio = insertarNodo(inicio,4, 1);
-    inicio = insertarNodo(inicio,3, 2);
-    inicio = insertarNodo(inicio,4, 1);
-    inicio = insertarNodo(inicio,4, 1);
-    inicio = insertarNodo(inicio, 2, 0);
-    inicio = insertarNodo(inicio, 2, 0);
-    inicio = insertarNodo(inicio, 2, 4);
-    inicio = insertarNodo(inicio, 2, 6);
-    inicio = borrarNodosVal(inicio, 3);
-    inicio = borrarNodosVal(inicio, 4);
+    inicio = insertarNodo(inicio, 1, 0);
+    inicio = insertarNodo(inicio, 5, 0);
+    inicio = insertarNodo(inicio, 6, 0);
+    inicio = insertarNodo(inicio, 4, 0);
+    inicio = insertarNodo(inicio, 10, 2);
     recorrerLista(inicio);
     printf("\n");
-    inicio = anadirMultiplesNodos(inicio, a, 2, 3);
+    insertarNodo(inicio, 11, 6);
+    printf("\n");
     recorrerLista(inicio);
+    insertarNodo(inicio, 15, 15);
     printf("\n");
-    recorrerAlrevez(inicio);
-    printf("\n");
-    inicio = borrarMultiplesNodos(inicio, 2);
-    inicio = anadirMultiplesNodos(inicio, a, 2, 3);
-    recorrerAlrevez(inicio);
-    buscarElementos(inicio, 3);
-    printf("%d", longitudLista(inicio));
-    inicio = eliminarLista(inicio);
+    recorrerLista(inicio);
 
 
 
@@ -91,36 +80,38 @@ struct nodo* insertarNodo(struct nodo *inicio, int num, int pos)
         return inicio;
 
     }
-    struct nodo *elemento = inicio;
-    for (int i = 0; i < pos; i++)
+
+    // Caso de insertar al comienzo
+    if (pos == 0)
     {
-        if(elemento->siguiente == NULL)
+        
+        struct nodo *nuevo = malloc(sizeof(struct nodo));
+        nuevo->val = num;
+        nuevo->siguiente = inicio;
+        nuevo->atras = inicio->atras;
+        inicio->atras->siguiente = nuevo;
+        inicio->atras = nuevo;
+        return nuevo;
+    }
+    struct nodo *elemento = inicio;
+    int i = 0;
+
+    // Recorrer elementos hasta llegar a la posicion donde se quiere insertar el codigo
+    do
+    {
+        
+        if(pos == i)
         {
             break;
         }
 
         elemento = elemento->siguiente;
-    }
+        i++;
+    } while (elemento != inicio);
     
     struct nodo *nuevo = malloc(sizeof(struct nodo));
     
-    //Insertar elementos si uno de los elementos no esta ligado de manera adecuada
-
-    if(elemento->siguiente == NULL)
-    {
-
-        elemento->siguiente = nuevo;
-        elemento->atras = nuevo;
-        nuevo->siguiente= elemento;
-        nuevo->atras = elemento;
-        nuevo->val = num;
-        if (pos == 0)
-            return nuevo;
-        else
-            return inicio;
-    }
-
-    //Insertar elemento si la lista ya está bien ligada con dos elementos
+    //Caso Base
     nuevo->siguiente = elemento;
     nuevo->atras = elemento->atras;
     elemento->atras->siguiente = nuevo;
@@ -263,11 +254,15 @@ struct nodo * anadirMultiplesNodos(struct nodo *inicio, int val[], int pos, int 
     struct nodo *elemento = inicio;
     struct nodo *inicio_lista = conversionLista(val, lon);
 
-
     //Caso si la posicion es mayor a la longitud
     if (pos > longitudLista(inicio))
+    {
         printf("Ingresa una posicion menor a la longitud de la lista");
         return inicio;
+
+    }
+
+    
     //Caso si la lista esta vacía
     if (listaVacia(inicio) == 0)
         return inicio_lista;
@@ -275,10 +270,9 @@ struct nodo * anadirMultiplesNodos(struct nodo *inicio, int val[], int pos, int 
     //Caso Base
     for (int i = 0; i < lon; i++)
     {
-
         elemento = elemento->siguiente;
     }
-    printf("%d", elemento->val);
+    
     struct nodo *temporal;
     
     //Nodo de al final de la lista que apunte al elemento
