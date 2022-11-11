@@ -17,8 +17,10 @@ struct nodo* eliminarLista(struct nodo *inicio);
 struct nodo * borrarNodosVal(struct nodo *inicio, int val);
 void buscarElementos(struct nodo *inicio, int val);
 struct nodo * conversionLista(int val[], int lon);
-//TODO:
 struct nodo * borrarMultiplesNodos(struct nodo *inicio, int val);
+//TODO:
+//Falta checar que funcione el borrar inicio y el borrar final
+
 struct nodo * anadirMultiplesNodos(struct nodo *inicio, int val[], int pos, int lon);
 
 
@@ -36,6 +38,10 @@ void main(void)
     inicio = insertarNodo(inicio,3, 2);
     inicio = insertarNodo(inicio,4, 1);
     inicio = insertarNodo(inicio,4, 1);
+    inicio = insertarNodo(inicio, 2, 0);
+    inicio = insertarNodo(inicio, 2, 0);
+    inicio = insertarNodo(inicio, 2, 4);
+    inicio = insertarNodo(inicio, 2, 6);
     inicio = borrarNodosVal(inicio, 3);
     inicio = borrarNodosVal(inicio, 4);
     recorrerLista(inicio);
@@ -45,8 +51,9 @@ void main(void)
     printf("\n");
     recorrerAlrevez(inicio);
     printf("\n");
+    inicio = borrarMultiplesNodos(inicio, 2);
     inicio = anadirMultiplesNodos(inicio, a, 2, 3);
-    recorrerLista(inicio);
+    recorrerAlrevez(inicio);
     buscarElementos(inicio, 3);
     printf("%d", longitudLista(inicio));
     inicio = eliminarLista(inicio);
@@ -185,7 +192,7 @@ struct nodo * borrarNodosVal(struct nodo *inicio, int val)
         return inicio;
     
     //Si la lista solo tiene un elemento se regresa inicio y 
-    if (inicio->siguiente == NULL && inicio->val == val)
+    if (inicio->siguiente == inicio && inicio->val == val)
     {
         free(inicio);
         inicio = NULL;
@@ -261,7 +268,6 @@ struct nodo * anadirMultiplesNodos(struct nodo *inicio, int val[], int pos, int 
     if (pos > longitudLista(inicio))
         printf("Ingresa una posicion menor a la longitud de la lista");
         return inicio;
-            printf("Hola");
     //Caso si la lista esta vacía
     if (listaVacia(inicio) == 0)
         return inicio_lista;
@@ -272,6 +278,7 @@ struct nodo * anadirMultiplesNodos(struct nodo *inicio, int val[], int pos, int 
 
         elemento = elemento->siguiente;
     }
+    printf("%d", elemento->val);
     struct nodo *temporal;
     
     //Nodo de al final de la lista que apunte al elemento
@@ -315,4 +322,57 @@ struct nodo * conversionLista(int val[], int lon)
 
     return inicio;
 
+}
+
+struct nodo * borrarMultiplesNodos(struct nodo *inicio, int val)
+{
+
+    //Si la lista esta vacia se termina esto
+    if (listaVacia(inicio) == 0)
+        return inicio;
+    
+    //Si la lista solo tiene un elemento se regresa inicio y 
+    if (inicio->siguiente == inicio && inicio->val == val)
+    {
+        free(inicio);
+        inicio = NULL;
+        return inicio;
+    }
+
+    else if (inicio->siguiente == inicio)
+        return inicio;
+    
+    
+    struct nodo *elemento = inicio;
+
+    while (inicio->val == val)
+    {
+
+        inicio = inicio->siguiente;
+        elemento->atras->siguiente = inicio;
+        inicio->atras = elemento->atras;
+        free(elemento);
+        elemento = inicio;
+    }
+
+    struct nodo *temporal;
+    do 
+    {
+        if(elemento->val == val)
+        {
+            temporal = elemento;
+            elemento = elemento->siguiente;
+            temporal->atras->siguiente = temporal->siguiente;
+            temporal->siguiente->atras = temporal->atras;
+            free(temporal);
+
+        }
+        else
+        {
+            elemento = elemento->siguiente;
+        }
+        
+    } while(elemento != inicio);
+    
+    return inicio;
 }
