@@ -48,6 +48,7 @@ void main(void)
     inicio = cambiarInicio(inicio,4);
     printf("\n");
     recorrerLista(inicio);
+    buscarElementos(inicio, 2);
     borrarNodosVal(inicio, 15);
     inicio = borrarNodosVal(inicio, 1);
     inicio = borrarNodosVal(inicio, 1);
@@ -253,21 +254,18 @@ struct nodo * borrarNodosVal(struct nodo *inicio, int val)
 void buscarElementos(struct nodo *inicio, int val)
 {
     struct nodo *elemento = inicio;
-    int i = 1;
-    printf("\n\n");
-    if(elemento->val == val)
-        printf("Posicion 0\n");
-    
-    elemento = elemento->siguiente;
-    while (elemento != inicio)
+    int i = 0;
+    //BUCLE DO WHILE Para recorrer
+    do 
     {
+        //SE imprime si se encuentra el elemento
         if (elemento->val == val)
         {
             printf("Posicion %i\n", i);
         }
         elemento = elemento->siguiente;
         i++;
-    }
+    } while (elemento != inicio);
 
 }
 
@@ -317,6 +315,7 @@ struct nodo * anadirMultiplesNodos(struct nodo *inicio, int val[], int pos, int 
 
 struct nodo * conversionLista(int val[], int lon)
 {
+    // SE CREA LA LISTA LIGADA
     struct nodo *inicio = malloc(sizeof(struct nodo));  
     if (inicio == NULL)
     {
@@ -329,7 +328,7 @@ struct nodo * conversionLista(int val[], int lon)
     struct nodo *elemento = inicio;
 
 
-
+    // SE AÑADEN LOS DEMAS NODOS A LA LISTA
     for (int i = 1; i < lon; i++)
     {
         struct nodo *nuevo = malloc(sizeof(struct nodo)); 
@@ -409,6 +408,7 @@ struct nodo * borrarMultiplesNodos(struct nodo *inicio, int val)
     return inicio;
 }
 
+//CAMBIA EL PUNTO DE INICIO DE LA LISTA
 struct nodo *cambiarInicio(struct nodo *inicio, int pos)
 {
     int i = 1;
