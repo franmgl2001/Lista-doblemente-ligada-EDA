@@ -21,6 +21,7 @@ struct nodo * conversionLista(int val[], int lon);
 struct nodo * borrarMultiplesNodos(struct nodo *inicio, int val);
 struct nodo * anadirMultiplesNodos(struct nodo *inicio, int val[], int pos, int lon);
 struct nodo * borrarNodosVal(struct nodo *inicio, int val);
+struct nodo *cambiarInicio(struct nodo *inicio, int pos);
 
 
 
@@ -44,8 +45,10 @@ void main(void)
     printf("\n");
     recorrerLista(inicio);
     insertarNodo(inicio, 15, 15);
+    inicio = cambiarInicio(inicio,4);
     printf("\n");
     recorrerLista(inicio);
+    borrarNodosVal(inicio, 15);
     inicio = borrarNodosVal(inicio, 1);
     inicio = borrarNodosVal(inicio, 1);
     printf("\n");
@@ -205,24 +208,22 @@ struct nodo* eliminarLista(struct nodo *inicio)
 
 struct nodo * borrarNodosVal(struct nodo *inicio, int val)
 {
-    //Si la lista esta vacia se termina esto
+    //CASO 0 ELIMINAMOS SI LA LISTA ESTA VACIA
     if (listaVacia(inicio) == 0)
         return inicio;
     
-    //Si la lista solo tiene un elemento se regresa inicio y 
+    //CASO 1 ELIMINAMOS SI SOLO HAY UN ELEMENTO
     if (inicio->siguiente == inicio && inicio->val == val)
     {
+        // LO eliminamos 
         free(inicio);
         inicio = NULL;
         return inicio;
     }
-
-    else if (inicio->siguiente == NULL)
-        return inicio;
     
     
     struct nodo *elemento = inicio;
-
+    //CASO 2 ELIMINAMOS PRIMER ELEMENTO
     if (inicio->val == val)
     {
         inicio = inicio->siguiente;
@@ -231,9 +232,11 @@ struct nodo * borrarNodosVal(struct nodo *inicio, int val)
         free(elemento);
         return inicio;
     }
-
-    while (elemento != inicio->atras)
+    //Caso 3 ELIMINAMOS CUALQUIER OTRO NUMERO
+    //recoremos la lista
+    do 
     {
+        
         if(elemento->val == val)
         {
             elemento->atras->siguiente = elemento->siguiente;
@@ -242,15 +245,8 @@ struct nodo * borrarNodosVal(struct nodo *inicio, int val)
             return inicio;
         }
         elemento = elemento->siguiente;
-    }
+    }while (elemento != inicio->atras);
 
-    if(elemento->val == val)
-    {
-        elemento->atras->siguiente = elemento->siguiente;
-        elemento->siguiente->atras = elemento->atras;
-        free(elemento);
-        return inicio;
-    }
     return inicio;
 }
 
@@ -411,4 +407,15 @@ struct nodo * borrarMultiplesNodos(struct nodo *inicio, int val)
     recorrerLista(inicio);
     printf("\n");
     return inicio;
+}
+
+struct nodo *cambiarInicio(struct nodo *inicio, int pos)
+{
+    int i = 1;
+    do{
+
+        inicio = inicio->siguiente;
+        i++;
+    }while (i != pos);
+    return  inicio;
 }
