@@ -1,13 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+//ESTRUCTURA DE DATOS
 struct nodo{
     int val;
     struct nodo *siguiente;
     struct nodo *atras;
 };
-//Ya quedaron
 
+//Prototipo de funciones
 void inicializarLista(struct nodo *inicio);
 struct nodo* insertarNodo(struct nodo *inicio, int num, int pos);
 int longitudLista(struct nodo *inicio);
@@ -15,35 +16,38 @@ void recorrerLista(struct nodo *inicio);
 void recorrerAlrevez(struct nodo *inicio);
 int listaVacia(struct nodo *elemento);
 struct nodo* eliminarLista(struct nodo *inicio);
-struct nodo * borrarNodosVal(struct nodo *inicio, int val);
 void buscarElementos(struct nodo *inicio, int val);
 struct nodo * conversionLista(int val[], int lon);
 struct nodo * borrarMultiplesNodos(struct nodo *inicio, int val);
-//TODO:
-//Falta checar que funcione el borrar inicio y el borrar final
-
 struct nodo * anadirMultiplesNodos(struct nodo *inicio, int val[], int pos, int lon);
+struct nodo * borrarNodosVal(struct nodo *inicio, int val);
+
+
 
 
 
 void main(void)
 {
     struct nodo *inicio = NULL;
-    struct nodo *prueba = NULL;
     int a[] = {1,2,3} ;
 
-    inicio = insertarNodo(inicio, 2, 0);
-    inicio = insertarNodo(inicio, 1, 0);
-    inicio = insertarNodo(inicio, 5, 0);
-    inicio = insertarNodo(inicio, 6, 0);
-    inicio = insertarNodo(inicio, 4, 0);
+    
     inicio = insertarNodo(inicio, 10, 2);
+    inicio = insertarNodo(inicio, 4, 0);
+
+    inicio = anadirMultiplesNodos(inicio, a, 0, 3);
+    inicio = anadirMultiplesNodos(inicio, a, 1, 3);
+
     recorrerLista(inicio);
     printf("\n");
     insertarNodo(inicio, 11, 6);
     printf("\n");
     recorrerLista(inicio);
     insertarNodo(inicio, 15, 15);
+    printf("\n");
+    recorrerLista(inicio);
+    inicio = borrarNodosVal(inicio, 1);
+    inicio = borrarNodosVal(inicio, 1);
     printf("\n");
     recorrerLista(inicio);
 
@@ -53,6 +57,7 @@ void main(void)
 
 int listaVacia(struct nodo *elemento)
 {
+    //CHECA QUE LA LISTA ESTE VACIAS SI EL ELEMENTO ES NULO
     if (elemento == NULL)
     {
         return 0;
@@ -65,16 +70,26 @@ int listaVacia(struct nodo *elemento)
 
 void inicializarLista(struct nodo *inicio)
 {
+    //INICIALIZA LA LISTA EN NULL
     inicio = NULL;
 }
 
 struct nodo* insertarNodo(struct nodo *inicio, int num, int pos)
 {
+    //CASO 1
     //Insertar elemento si la lista esta vacia
     if(listaVacia(inicio) == 0)
     {   
+        //ALLOCAR NODO
         inicio = malloc(sizeof(struct nodo));
+        struct nodo *inicio = malloc(sizeof(struct nodo));  
+        if (inicio == NULL)
+        {
+        printf("El nodo no se pudo alocar ");
+        return inicio;
+        }
         inicio->val = num;
+        //SE PONEN EN SIGUIENTE Y DESPUES 
         inicio->siguiente = inicio;
         inicio->atras = inicio;
         return inicio;
@@ -84,34 +99,42 @@ struct nodo* insertarNodo(struct nodo *inicio, int num, int pos)
     // Caso de insertar al comienzo
     if (pos == 0)
     {
-        
+        //SE ALOCA EL NODO
         struct nodo *nuevo = malloc(sizeof(struct nodo));
+        if (nuevo == NULL)
+        {
+            printf("El nodo no se pudo alocar ");
+            return inicio;
+        }
         nuevo->val = num;
+        //SE INSERTA
         nuevo->siguiente = inicio;
         nuevo->atras = inicio->atras;
         inicio->atras->siguiente = nuevo;
         inicio->atras = nuevo;
+        //SE REGRESA LA POSICION NUEVA COMO INICIO
         return nuevo;
     }
+    //Caso Base
     struct nodo *elemento = inicio;
     int i = 0;
 
     // Recorrer elementos hasta llegar a la posicion donde se quiere insertar el codigo
     do
     {
-        
-        if(pos == i)
-        {
-            break;
-        }
 
         elemento = elemento->siguiente;
         i++;
-    } while (elemento != inicio);
+    } while (elemento != inicio && pos != i);
     
     struct nodo *nuevo = malloc(sizeof(struct nodo));
+    if (nuevo == NULL)
+    {
+        printf("El nodo no se pudo alocar ");
+        return inicio;
+    }
     
-    //Caso Base
+    //SE ALOCA e INSERTA EL NODO 
     nuevo->siguiente = elemento;
     nuevo->atras = elemento->atras;
     elemento->atras->siguiente = nuevo;
@@ -124,24 +147,28 @@ struct nodo* insertarNodo(struct nodo *inicio, int num, int pos)
 
 int longitudLista(struct nodo *inicio)
 {
+    //SE CHECA SI LA LISTA ESTA VACIA
     if (listaVacia(inicio) == 0)
         return 0;
 
     int cont = 1;
     struct nodo *elemento = inicio;
+    //SE RECORRE LA LISTA HASTA LLEGAR AL FINAL (se cuenta en cada iteracion)
     do 
     {
         elemento = elemento->siguiente;
         cont++;
     } while (elemento != inicio);
+    //Se regresa el contador
     return cont;
 
 }
 
 void recorrerLista(struct nodo *inicio)
 {
+    //Se 
     struct nodo *elemento = inicio;
-
+    //SE RECORRE LA LISTA LIGADA
     do 
     {
         printf("%i \t", elemento->val);
@@ -152,7 +179,7 @@ void recorrerLista(struct nodo *inicio)
 void recorrerAlrevez(struct nodo *inicio)
 {
     struct nodo *elemento = inicio->atras;
-
+    //Se recorre la lista con el apuntador de atras
     do 
     {
         printf("%i \t", elemento->val);
@@ -164,7 +191,7 @@ void recorrerAlrevez(struct nodo *inicio)
 struct nodo* eliminarLista(struct nodo *inicio)
 {
     struct nodo *elemento = inicio;
-
+    // SE recorre la lista y en cada iteracion se hace free en cada 
     do
     {
         elemento = elemento->siguiente;
@@ -253,38 +280,39 @@ struct nodo * anadirMultiplesNodos(struct nodo *inicio, int val[], int pos, int 
     //Definir Variables
     struct nodo *elemento = inicio;
     struct nodo *inicio_lista = conversionLista(val, lon);
-
-    //Caso si la posicion es mayor a la longitud
-    if (pos > longitudLista(inicio))
-    {
-        printf("Ingresa una posicion menor a la longitud de la lista");
-        return inicio;
-
-    }
-
     
     //Caso si la lista esta vacía
     if (listaVacia(inicio) == 0)
         return inicio_lista;
     
+    //Caso si esta al frente de la lista
+    if (pos == 0)
+    {
+        elemento = elemento->atras;
+        inicio->atras = inicio_lista->atras;
+        elemento->siguiente = inicio_lista;
+        inicio_lista->atras->siguiente = inicio;
+        inicio_lista->atras = elemento;
+        return inicio_lista;
+    }
     //Caso Base
-    for (int i = 0; i < lon; i++)
+    int i = 0;
+    do
     {
         elemento = elemento->siguiente;
-    }
+        i++;
+        
+    } while (inicio != elemento && pos != i);
+    
     
     struct nodo *temporal;
     
-    //Nodo de al final de la lista que apunte al elemento
-    inicio_lista->atras->siguiente = elemento;
-    //Nodo de atras de elemento que apunte 
-    elemento->atras->siguiente = inicio_lista;
-    //Se pone el temporal para intercambiar nodo de atras con lista Inicial
     temporal = elemento->atras;
-    //Se iguala el nodo de elemento atras al inicio de la lista
     elemento->atras = inicio_lista->atras;
-    //Se iguala el inicio de la lista con el elemnto de atras
+    temporal->siguiente = inicio_lista;
+    inicio_lista->atras->siguiente = elemento;
     inicio_lista->atras = temporal;
+
     
 
     return inicio;
@@ -294,6 +322,11 @@ struct nodo * anadirMultiplesNodos(struct nodo *inicio, int val[], int pos, int 
 struct nodo * conversionLista(int val[], int lon)
 {
     struct nodo *inicio = malloc(sizeof(struct nodo));  
+    if (inicio == NULL)
+    {
+        printf("El nodo no se pudo alocar ");
+        return inicio;
+    }
     inicio->val = val[0];
     inicio->siguiente = inicio;
     inicio->atras = inicio;
@@ -303,7 +336,12 @@ struct nodo * conversionLista(int val[], int lon)
 
     for (int i = 1; i < lon; i++)
     {
-        struct nodo *nuevo = malloc(sizeof(struct nodo));
+        struct nodo *nuevo = malloc(sizeof(struct nodo)); 
+        if (nuevo == NULL)
+        {
+            printf("El nodo no se pudo alocar ");
+            return inicio;
+        }
         elemento->siguiente = nuevo;
         nuevo->atras = elemento;
         nuevo->siguiente = inicio;
@@ -332,23 +370,25 @@ struct nodo * borrarMultiplesNodos(struct nodo *inicio, int val)
         inicio = NULL;
         return inicio;
     }
-
-    else if (inicio->siguiente == inicio)
-        return inicio;
     
     
     struct nodo *elemento = inicio;
 
+//TODO CHECAR QUE FUNCIONE EL CASO DE BORRAR INICIO
     while (inicio->val == val)
     {
-
+        
         inicio = inicio->siguiente;
         elemento->atras->siguiente = inicio;
         inicio->atras = elemento->atras;
+        elemento->siguiente = NULL;
+        elemento->atras = NULL;
         free(elemento);
         elemento = inicio;
+        
     }
-
+    
+    elemento = inicio;
     struct nodo *temporal;
     do 
     {
@@ -367,6 +407,8 @@ struct nodo * borrarMultiplesNodos(struct nodo *inicio, int val)
         }
         
     } while(elemento != inicio);
-    
+    printf("\n\n");
+    recorrerLista(inicio);
+    printf("\n");
     return inicio;
 }
