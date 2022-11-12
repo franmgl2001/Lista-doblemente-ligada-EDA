@@ -83,13 +83,24 @@ struct nodo *enque (struct nodo *inicio, int val)
     if (inicio->valor >= val)
     {
         struct nodo *nuevo = malloc(sizeof(struct nodo));
+        if (nuevo == NULL)
+            {
+        printf("No se pudo alocar el nodo");
+        return inicio;
+            }
         nuevo->valor = val;
         nuevo->siguiente = inicio;
         return nuevo;
     }
 
+    //Caso Base si el nodo se encuentra a la mitad
     struct nodo *actual = inicio;
     struct nodo *nuevo = malloc(sizeof(struct nodo));
+    if (nuevo == NULL)
+    {
+        printf("No se pudo alocar el nodo");
+        return inicio;
+    }
     
     while (actual->siguiente != NULL)
     {
@@ -102,12 +113,12 @@ struct nodo *enque (struct nodo *inicio, int val)
         }
         actual = actual->siguiente;
     }
-
+    //Caso en el que el nodo se encuentre al final
     actual->siguiente = nuevo;
     nuevo->valor = val;
     nuevo->siguiente = NULL;
     return inicio;
-}   
+}
 
 void recorrerCola(struct nodo *elemento)
 {
@@ -133,6 +144,7 @@ int tamanoCola(struct nodo *elemento)
 
 struct nodo *desenque(struct nodo *inicio)
 {
+    //Se borra el elemento del inicio y se regresa el segundo elemento de queue
     struct nodo *elemento = inicio->siguiente;
     free(inicio);
     return elemento;
@@ -141,6 +153,7 @@ struct nodo *desenque(struct nodo *inicio)
 
 struct nodo *encontrarNodo(struct nodo *inicio, int val)
 {
+    //Se recorre la lista con un contador y se regresa el nodo
     struct nodo *elemento = inicio;
     int cont = 0;
     while (elemento != NULL)
@@ -159,6 +172,7 @@ struct nodo *encontrarNodo(struct nodo *inicio, int val)
 
 struct nodo *encontrarPos(struct nodo *inicio, int pos)
 {
+    // Se busca el nodo por posicion y se regresa el nodo
     if (tamanoCola(inicio) <= pos)
     {
         printf("La posicion mandada es mayor al tamanio de la cola\n");
@@ -180,6 +194,7 @@ struct nodo *encontrarPos(struct nodo *inicio, int pos)
 
 struct nodo *eliminarCola(struct nodo *actual)
 {
+    //Se elimina la cola para evitar fugas de memoria
     struct nodo *anterior = NULL;
     while (actual != NULL)
     {
@@ -192,6 +207,7 @@ struct nodo *eliminarCola(struct nodo *actual)
 
 struct nodo *enqueMultiple(struct nodo *inicio, int tam, int val[])
 {
+    // SE hacen varios enques dados por una lista
     for (int i = 0; i < tam; i++)
     {
         inicio = enque(inicio, val[i]);

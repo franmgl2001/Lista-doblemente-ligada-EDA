@@ -54,6 +54,7 @@ void main(void)
     inicio = borrarNodosVal(inicio, 1);
     printf("\n");
     recorrerLista(inicio);
+    inicio = eliminarLista(inicio);
 
 
 
